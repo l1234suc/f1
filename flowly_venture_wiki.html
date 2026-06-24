@@ -1,0 +1,706 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --sage:#A3B18A;--lavender:#C4B5FD;--bg:#0F0F0F;--bg2:#161616;--bg3:#1e1e1e;
+    --text:#E8E6DE;--muted:#888680;--border:#2a2a2a;--card:#1a1a1a;
+    --red:#E24B4A;--amber:#EF9F27;--teal:#1D9E75;--blue:#378ADD;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;scroll-behavior:smooth}
+  /* PROGRESS BAR */
+  #progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--sage),var(--lavender));width:0%;transition:width .1s;z-index:100}
+  /* NAV */
+  #nav{position:fixed;top:0;left:0;right:0;z-index:90;background:rgba(15,15,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:52px;gap:1.5rem}
+  .nav-logo{font-size:15px;font-weight:600;color:var(--sage);letter-spacing:-.01em;flex:none}
+  .nav-links{display:flex;gap:1rem;flex:1;overflow:hidden}
+  .nav-link{font-size:11px;color:var(--muted);cursor:pointer;white-space:nowrap;text-decoration:none;padding:4px 8px;border-radius:4px;transition:color .2s,background .2s}
+  .nav-link:hover,.nav-link.active{color:var(--text);background:var(--bg3)}
+  .nav-badge{font-size:10px;background:var(--sage);color:#0F0F0F;padding:2px 6px;border-radius:20px;font-weight:600;margin-left:auto;flex:none}
+  /* SECTIONS */
+  section{min-height:100vh;padding:100px 2rem 80px;max-width:900px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
+  /* HERO */
+  #s0{position:relative;overflow:hidden}
+  .hero-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:1rem;opacity:.8}
+  .hero-h{font-size:clamp(2.8rem,6vw,5rem);font-weight:300;line-height:1.08;letter-spacing:-.03em;color:#fff}
+  .hero-h em{font-style:normal;color:var(--sage)}
+  .hero-sub{font-size:1.1rem;color:var(--muted);line-height:1.7;margin:1.5rem 0 2rem;max-width:560px}
+  .kpi-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
+  .kpi{flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem}
+  .kpi-val{font-size:2rem;font-weight:500;color:var(--sage);line-height:1}
+  .kpi-lbl{font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.4}
+  /* SECTION HEADINGS */
+  .sec-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:.6rem;opacity:.7}
+  .sec-h{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:300;line-height:1.15;letter-spacing:-.025em;color:#fff;margin-bottom:1rem}
+  .sec-body{font-size:.95rem;color:var(--muted);line-height:1.8;max-width:660px}
+  /* CARDS */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1.5rem}
+  .card-h{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sage);margin-bottom:.6rem;font-weight:500}
+  .card-body{font-size:.875rem;color:var(--muted);line-height:1.7}
+  .card-body strong{color:var(--text);font-weight:500}
+  .badge{display:inline-block;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;letter-spacing:.04em}
+  .badge-sage{background:rgba(163,177,138,.15);color:var(--sage);border:1px solid rgba(163,177,138,.3)}
+  .badge-lav{background:rgba(196,181,253,.12);color:var(--lavender);border:1px solid rgba(196,181,253,.25)}
+  .badge-red{background:rgba(226,75,74,.1);color:var(--red);border:1px solid rgba(226,75,74,.25)}
+  .badge-teal{background:rgba(29,158,117,.1);color:var(--teal);border:1px solid rgba(29,158,117,.25)}
+  /* MINDMAP */
+  #mindmap-wrap{margin-top:2rem;position:relative}
+  #mindmap-svg{width:100%;max-width:860px}
+  .node-info{background:var(--bg3);border:1px solid var(--lavender);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;min-height:60px;font-size:.875rem;color:var(--text);line-height:1.6;transition:all .3s}
+  /* TESTING CARDS */
+  .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+  .test-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;position:relative;overflow:hidden}
+  .test-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+  .tc-a::before{background:var(--amber)}
+  .tc-b::before{background:var(--blue)}
+  .tc-c::before{background:var(--sage)}
+  .tc-d::before{background:var(--lavender)}
+  .test-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+  .test-content{font-size:.85rem;color:var(--text);line-height:1.6}
+  /* QUOTE */
+  .quote{border-left:2px solid var(--lavender);padding:.8rem 1.2rem;margin:1rem 0;font-size:.9rem;color:var(--text);line-height:1.6;font-style:italic}
+  .quote-src{font-size:.78rem;color:var(--muted);font-style:normal;margin-top:.3rem}
+  /* COMP TABLE */
+  .comp-table{width:100%;border-collapse:collapse;margin-top:1.5rem;font-size:.85rem}
+  .comp-table th{text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--muted);font-weight:500;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+  .comp-table td{padding:.7rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text)}
+  .comp-table tr:hover td{background:var(--bg3)}
+  .dot-x{color:var(--red)}
+  .dot-ok{color:var(--teal)}
+  .dot-part{color:var(--amber)}
+  /* BIZ MODEL */
+  .price-row{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap}
+  .price-card{flex:1;min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+  .price-card.featured{border-color:var(--sage)}
+  .price-tier{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.4rem}
+  .price-val{font-size:2.2rem;font-weight:300;color:#fff;line-height:1}
+  .price-val sup{font-size:.9rem;vertical-align:super;color:var(--muted)}
+  .price-val sub{font-size:.7rem;color:var(--muted)}
+  .price-desc{font-size:.8rem;color:var(--muted);margin-top:.6rem;line-height:1.5}
+  /* RISK / PIVOT */
+  .pivot-box{background:linear-gradient(135deg,rgba(196,181,253,.06),rgba(163,177,138,.04));border:1px solid var(--lavender);border-radius:14px;padding:1.6rem;margin-top:1.5rem}
+  .pivot-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lavender);margin-bottom:.6rem}
+  /* TECH STACK */
+  .stack-row{display:flex;flex-direction:column;gap:.6rem;margin-top:1.5rem}
+  .stack-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:1rem}
+  .stack-dot{width:8px;height:8px;border-radius:50%;background:var(--sage);margin-top:.35rem;flex:none}
+  .stack-h{font-size:.85rem;font-weight:500;color:var(--text);margin-bottom:.2rem}
+  .stack-body{font-size:.8rem;color:var(--muted);line-height:1.6}
+  /* SCIENCE TABLE */
+  .sci-grid{display:grid;gap:.8rem;margin-top:1.5rem}
+  .sci-row{display:grid;grid-template-columns:1fr 2fr;gap:1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
+  .sci-feat{font-size:.85rem;font-weight:500;color:var(--sage)}
+  .sci-ref{font-size:.8rem;color:var(--muted);line-height:1.6}
+  /* GTM */
+  .aarrr{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:1.5rem}
+  .aarrr-cell{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem .7rem;text-align:center}
+  .aarrr-letter{font-size:1.4rem;font-weight:300;color:var(--sage);margin-bottom:.3rem}
+  .aarrr-name{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
+  .aarrr-val{font-size:.78rem;color:var(--text)}
+  /* ANIMATIONS */
+  @keyframes lavpulse{0%,100%{opacity:.6}50%{opacity:1}}
+  @keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .visible{animation:fadeup .5s ease both}
+  .lav-pulse{animation:lavpulse 2.5s ease-in-out infinite}
+  /* SCROLLSPY active section indicator */
+  #section-counter{font-size:11px;color:var(--muted);margin-left:auto}
+</style>
+
+<div id="progress-bar"></div>
+
+<nav id="nav">
+  <span class="nav-logo">⬡ Flowly</span>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="goto(0)">Overview</a>
+    <a class="nav-link" onclick="goto(1)">Problem</a>
+    <a class="nav-link" onclick="goto(2)">Solution</a>
+    <a class="nav-link" onclick="goto(3)">Market</a>
+    <a class="nav-link" onclick="goto(4)">Business</a>
+    <a class="nav-link" onclick="goto(5)">Testing</a>
+    <a class="nav-link" onclick="goto(6)">Science</a>
+    <a class="nav-link" onclick="goto(7)">Design</a>
+    <a class="nav-link" onclick="goto(8)">Risk</a>
+    <a class="nav-link" onclick="goto(9)">Tech</a>
+  </div>
+  <span id="section-counter" class="nav-badge">01 / 10</span>
+</nav>
+
+<!-- 0: EXECUTIVE SUMMARY -->
+<section id="s0">
+  <div class="hero-eyebrow">Venture Wiki · Flowly · June 2026</div>
+  <h1 class="hero-h">One focus.<br>Zero <em>chaos</em>.</h1>
+  <p class="hero-sub">Flowly is the first AI-powered learning environment built specifically for ADHS students in MINT programmes — replacing 5–8 fragmented apps with a single, neurobiologically informed workspace.</p>
+  <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+    <span class="badge badge-sage">ADHS-first</span>
+    <span class="badge badge-lav">KI-gestützt</span>
+    <span class="badge badge-teal">Validiert · n=24</span>
+    <span class="badge badge-red">2× Abbruchrisiko</span>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">170k</div><div class="kpi-lbl">ADHS-Studierende in Deutschland (geschätzt)</div></div>
+    <div class="kpi"><div class="kpi-val">49%</div><div class="kpi-lbl">Abschlussquote bei ADHS vs. 59% ohne</div></div>
+    <div class="kpi"><div class="kpi-val">83%</div><div class="kpi-lbl">Befragte berichten von Tool-Überflutung</div></div>
+    <div class="kpi"><div class="kpi-val">25€</div><div class="kpi-lbl">Validierte max. Zahlungsbereitschaft / Monat</div></div>
+  </div>
+</section>
+
+<!-- 1: PROBLEM -->
+<section id="s1">
+  <div class="sec-tag">01 · Problem-Solution Fit</div>
+  <h2 class="sec-h">Das Strukturproblem, nicht das Wissensproblem</h2>
+  <p class="sec-body">In Deutschland wird die Prävalenz von ADHS unter Studierenden auf 4–6 % geschätzt — ~120.000–170.000 Studierende. Die zentrale Herausforderung liegt nicht im Verständnis der Inhalte, sondern in exekutiven Funktionen: Aufmerksamkeit halten, Aufgaben planen, Wissen nachhaltig verknüpfen.</p>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card">
+      <div class="card-h">Exekutive Dysfunktion</div>
+      <div class="card-body">ADHS beeinträchtigt die <strong>regulatorischen Kontrollnetzwerke</strong> des Gehirns — Priorisierung und Koordination von Aufgaben werden blockiert. <em>(Álvarez-Godos et al., 2023; Pagespetit et al., 2025)</em></div>
+    </div>
+    <div class="card">
+      <div class="card-h">Objektpermanenz-Defizit</div>
+      <div class="card-body"><strong>Out of sight, out of mind.</strong> Was nicht aktiv sichtbar ist, existiert für das ADHS-Gehirn nicht. Über 4 Apps verstreute Materialien triggern mentalen Abbruch. <em>(Kofler et al., 2020)</em></div>
+    </div>
+    <div class="card">
+      <div class="card-h">Cognitive Load</div>
+      <div class="card-body">Swellers <strong>Cognitive Load Theory</strong>: Split-Attention-Effekt zwischen isolierten Systemen erhöht kognitive Belastung additiv und blockiert eigentliches Lernen.</div>
+    </div>
+    <div class="card">
+      <div class="card-h">MINT-Missmatch</div>
+      <div class="card-body">MINT-Studiengänge erfordern <strong>hohe Informationsdichte</strong> und aufeinander aufbauende Inhalte — genau das, was bei ADHS besonders herausfordernd ist.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem">
+    <div class="sec-tag">Synaptic Problem Map</div>
+    <div id="mindmap-wrap">
+      <svg id="mindmap-svg" viewBox="0 0 860 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ma" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+        <!-- Center -->
+        <ellipse id="mn0" cx="430" cy="180" rx="72" ry="36" fill="rgba(163,177,138,.18)" stroke="#A3B18A" stroke-width="1.5" style="cursor:pointer"/>
+        <text x="430" y="176" text-anchor="middle" fill="#A3B18A" font-size="13" font-family="Inter" font-weight="500">ADHS-Studierende</text>
+        <text x="430" y="193" text-anchor="middle" fill="#A3B18A" font-size="11" font-family="Inter" opacity=".7">MINT · 4–6%</text>
+
+        <!-- Nodes -->
+        <!-- Top left: Exekutive Dysfunktion -->
+        <g id="mn1" style="cursor:pointer" onclick="showInfo('Exekutive Dysfunktionen: Planung, Priorisierung, Impulskontrolle, schwaches Arbeitsgedächtnis. Quelle: Álvarez-Godos et al. 2023')">
+          <ellipse cx="160" cy="80" rx="90" ry="30" fill="rgba(196,181,253,.12)" stroke="#C4B5FD" stroke-width="1"/>
+          <text x="160" y="76" text-anchor="middle" fill="#C4B5FD" font-size="12" font-family="Inter" font-weight="500">Exekutive</text>
+          <text x="160" y="91" text-anchor="middle" fill="#C4B5FD" font-size="12" font-family="Inter" font-weight="500">Dysfunktionen</text>
+        </g>
+        <!-- Top right: Tool-Fragmentierung -->
+        <g id="mn2" style="cursor:pointer" onclick="showInfo('58% der Befragten nutzen 3+ Apps parallel (Ø 3,4). Der Wechsel kostet kognitive Energie, die für Verstehen gebraucht wird. Eigene Umfrage n=24.')">
+          <ellipse cx="700" cy="80" rx="90" ry="30" fill="rgba(239,159,39,.1)" stroke="#EF9F27" stroke-width="1"/>
+          <text x="700" y="76" text-anchor="middle" fill="#EF9F27" font-size="12" font-family="Inter" font-weight="500">Tool-</text>
+          <text x="700" y="91" text-anchor="middle" fill="#EF9F27" font-size="12" font-family="Inter" font-weight="500">Fragmentierung</text>
+        </g>
+        <!-- Bottom left: Abbruchrisiko -->
+        <g id="mn3" style="cursor:pointer" onclick="showInfo('2-fach erhöhtes Abbruchrisiko. Nur 49% Abschlussquote vs. 59% bei Studierenden ohne ADHS. Quelle: DuPaul et al. 2018')">
+          <ellipse cx="160" cy="280" rx="90" ry="30" fill="rgba(226,75,74,.1)" stroke="#E24B4A" stroke-width="1"/>
+          <text x="160" y="276" text-anchor="middle" fill="#E24B4A" font-size="12" font-family="Inter" font-weight="500">2× Abbruch-</text>
+          <text x="160" y="291" text-anchor="middle" fill="#E24B4A" font-size="12" font-family="Inter" font-weight="500">risiko</text>
+        </g>
+        <!-- Bottom right: Fehlende Struktur -->
+        <g id="mn4" style="cursor:pointer" onclick="showInfo('Objektpermanenz-Defizit: Was nicht sichtbar ist, existiert nicht. Kofler et al. 2020 — Working Memory Deficits in ADHD (bifactor model).')">
+          <ellipse cx="700" cy="280" rx="90" ry="30" fill="rgba(29,158,117,.1)" stroke="#1D9E75" stroke-width="1"/>
+          <text x="700" y="276" text-anchor="middle" fill="#1D9E75" font-size="12" font-family="Inter" font-weight="500">Objektpermanenz-</text>
+          <text x="700" y="291" text-anchor="middle" fill="#1D9E75" font-size="12" font-family="Inter" font-weight="500">Defizit</text>
+        </g>
+
+        <!-- Connection lines (drawn via JS) -->
+        <line id="l1" x1="250" y1="100" x2="360" y2="155" stroke="#C4B5FD" stroke-width="1" stroke-dasharray="4 4" opacity="0" marker-end="url(#ma)"/>
+        <line id="l2" x1="610" y1="100" x2="500" y2="155" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4 4" opacity="0" marker-end="url(#ma)"/>
+        <line id="l3" x1="250" y1="260" x2="360" y2="205" stroke="#E24B4A" stroke-width="1" stroke-dasharray="4 4" opacity="0" marker-end="url(#ma)"/>
+        <line id="l4" x1="610" y1="260" x2="500" y2="205" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 4" opacity="0" marker-end="url(#ma)"/>
+      </svg>
+      <div class="node-info" id="node-info">👆 Klicke auf einen Knoten, um Forschungsdetails zu sehen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2: SOLUTION -->
+<section id="s2">
+  <div class="sec-tag">02 · Produktvision</div>
+  <h2 class="sec-h">Ein Ort. Alle Materialien.<br>Ein klarer Lernpfad.</h2>
+  <p class="sec-body">Flowly vereint die drei kognitiven Lernphasen — Verstehen, Behalten, Abrufen — in einem einzigen Workflow. Kein Systemwechsel. Kein Tab-Switching. Nur Fokus.</p>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card">
+      <div class="card-h lav-pulse" style="color:var(--lavender)">Material-Hub</div>
+      <div class="card-body">Alle Skripte, Zusammenfassungen, Karteikarten eines Fachs an <strong>einem Ort</strong>. Eliminiert Split-Attention-Effekt vollständig. <em>(ISB, 2023; Álvarez-Godos 2023)</em></div>
+    </div>
+    <div class="card">
+      <div class="card-h">KI-Strukturierung</div>
+      <div class="card-body">Automatische Extraktion von <strong>6–12 Schlüsselkonzepten</strong> aus hochgeladenen PDFs + Generierung von Zusammenfassungen, Erklärungen und Karteikarten pro Konzept.</div>
+    </div>
+    <div class="card">
+      <div class="card-h">Mindmap-Navigation</div>
+      <div class="card-body">Radiale Synapsen-Map mit <strong>Gedächtnisstärke-Ringen</strong> — ADHS-Gehirne profitieren von visueller Vernetzung impliziter Zusammenhänge. <em>(Cuber et al., 2024)</em></div>
+    </div>
+    <div class="card">
+      <div class="card-h">Sechs Lernmodi</div>
+      <div class="card-body"><strong>Übersicht · Mindmap · Karteikarten · KI-Tutor · Panik-Modus · Pomodoro</strong> — alle drei Phasen (Verstehen / Behalten / Abrufen) ohne Systemwechsel abgedeckt.</div>
+    </div>
+    <div class="card">
+      <div class="card-h">Pomodoro-Timer</div>
+      <div class="card-body">Konfigurierbar (25/45/50 Min). Time Blindness ist ein Kerndefizit bei ADHS — externer Timer übernimmt exekutive Zeitstrukturierung. <em>(arXiv, 2025; Hartung et al., 2022)</em></div>
+    </div>
+    <div class="card">
+      <div class="card-h">Gamification</div>
+      <div class="card-body">XP · Levels · Streak · Badges. ADHS ist primär eine Störung des <strong>Belohnungssystems</strong> — unmittelbare Rückmeldung ersetzt verzögerte Motivation. <em>(Gabriely et al., 2020)</em></div>
+    </div>
+  </div>
+
+  <div class="pivot-box" style="margin-top:2rem">
+    <div class="pivot-label">🔥 Panik-Modus — User-Validated Pivot</div>
+    <p style="font-size:.875rem;color:var(--text);line-height:1.7">Externe Dringlichkeit aktiviert Dopaminausschüttung und ermöglicht Hyperfokus-Zustände, die im normalen Lernmodus schwer erreichbar sind. Was initial kontraintuitiv wirkte, wurde im Testing als stärkstes Feature validiert — <em>"so macht das mehr Spaß"</em> (Tester 1). Bettis et al. 2017: kurzfristige, intensive Lerninterventionen reduzieren Stress und aktivieren exekutive Funktionen.</p>
+  </div>
+</section>
+
+<!-- 3: MARKET -->
+<section id="s3">
+  <div class="sec-tag">03 · Markt & Wettbewerb</div>
+  <h2 class="sec-h">Alle lösen ein Teilproblem.<br>Keiner löst das eigentliche.</h2>
+  <p class="sec-body">Beachhead-Markt: ADHS-MINT-Studierende an deutschen Hochschulen (~60k–80k). Erweiterbar auf alle Studierenden ohne ADHS — eigene Umfrage zeigt: Fragmentierungs-Schmerz ist nicht ADHS-exklusiv.</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Stärke</th>
+        <th>Kern-Schwäche (ADHS)</th>
+        <th>Modell</th>
+        <th>Struktur</th>
+        <th>KI</th>
+        <th>Fokus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Quizlet</strong></td>
+        <td>Sofort startbereit</td>
+        <td>Viele Modi → Fokusverlust, Verzetteln</td>
+        <td>Freemium</td>
+        <td class="dot-part">Teilw.</td>
+        <td class="dot-x">✗</td>
+        <td class="dot-x">✗</td>
+      </tr>
+      <tr>
+        <td><strong>Anki</strong></td>
+        <td>Spaced Repetition</td>
+        <td>Hoher manueller Aufwand, nur Karteikarten</td>
+        <td>OSS + App €</td>
+        <td class="dot-x">✗</td>
+        <td class="dot-x">✗</td>
+        <td class="dot-ok">✓</td>
+      </tr>
+      <tr>
+        <td><strong>StudySmarter</strong></td>
+        <td>Feature-Reich</td>
+        <td>Fragmentierung, mehr Setup als Lernen</td>
+        <td>Freemium (teuer)</td>
+        <td class="dot-part">Teilw.</td>
+        <td class="dot-part">Teilw.</td>
+        <td class="dot-x">✗</td>
+      </tr>
+      <tr>
+        <td><strong>Notion</strong></td>
+        <td>Flexibel</td>
+        <td>Kein Lernkontext, reines Struktur-Tool</td>
+        <td>Freemium</td>
+        <td class="dot-ok">✓</td>
+        <td class="dot-x">✗</td>
+        <td class="dot-x">✗</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--sage)">Flowly</strong></td>
+        <td>All-in-One + KI-Tutor</td>
+        <td>—</td>
+        <td>4,99–7,99 €/Mo</td>
+        <td class="dot-ok" style="color:var(--sage)">✓✓</td>
+        <td class="dot-ok" style="color:var(--sage)">✓✓</td>
+        <td class="dot-ok" style="color:var(--sage)">✓✓</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4: BUSINESS MODEL -->
+<section id="s4">
+  <div class="sec-tag">04 · Business Model & Financials</div>
+  <h2 class="sec-h">API-first. Scalable.<br>DSGVO-konform.</h2>
+  <p class="sec-body">Die Kernarchitektur-Entscheidung: Cloud-API (Mistral/Claude via AWS Frankfurt) statt lokalem GPU-Hosting. Grund: Fixkosten lokaler Server (~150–300 €/Mo) würden 25–50 zahlende User erfordern, nur um die KI-Grundgebühr zu decken.</p>
+
+  <div class="price-row">
+    <div class="price-card">
+      <div class="price-tier">Free</div>
+      <div class="price-val">0 <sup>€</sup></div>
+      <div class="price-desc">2 Fächer · max. 50 Seiten gesamt · Günstigstes Modell (gpt-4o-mini / Mistral Nemo)</div>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">B2C · Pro</div>
+      <div class="price-val">4,99–7,99 <sup>€</sup><sub>/Mo</sub></div>
+      <div class="price-desc">Unbegrenzt Fächer · Alle 6 Lernmodi · KI-Tutor mit vollem Kontext · Fair-Use-Limit auf Datenvolumen</div>
+      <div style="margin-top:.8rem"><span class="badge badge-sage">Validiert bis 25€/Mo</span></div>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">B2B · Uni-Lizenz</div>
+      <div class="price-val">2.500 <sup>€</sup><sub>einmalig</sub></div>
+      <div class="price-desc">+ 250 €/Mo laufend = 5.500 € im ersten Jahr. Ab User 100: Break-even bei 4,99 €-Abo. Ab Jahr 2: nur 3.000 € Fixkosten.</div>
+    </div>
+  </div>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card">
+      <div class="card-h">Kostenstruktur pro User</div>
+      <div class="card-body">Embedding eines 100-Seitigen PDFs: <strong>~0,004 €</strong>. 100 Fragen/Monat via RAG: <strong>~0,15 €</strong>. Abo 6 €: Marge ~97,5%. Power-User-Risiko abgefangen durch Fair-Use-Volumenlimit.</div>
+    </div>
+    <div class="card">
+      <div class="card-h">Churn-Risiko</div>
+      <div class="card-body">Studierende nutzen intensiv Jan/Feb & Jun/Jul. In Semesterferien droht Kündigung. Mitigation: Semester-Pass statt monatlichem Abo anbieten (<strong>4,99€ × 12 = 59,88€/Jahr</strong> attraktiv kommunizieren).</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5: TESTING -->
+<section id="s5">
+  <div class="sec-tag">05 · Validierung & Testing</div>
+  <h2 class="sec-h">User-Validated Pivot:<br>Daten statt Annahmen.</h2>
+  <p class="sec-body">Zwei Testing-Runden. Funktionaler HTML-Prototyp (flowlyv2.netlify.app). n=24 Studierende, davon n=6 mit diagnostiziertem/selbsteingeschätztem ADHS als Zielgruppe, n=18 neurotypische Kontrollgruppe.</p>
+
+  <!-- Animated KPI row -->
+  <div class="kpi-row" id="kpi-test">
+    <div class="kpi"><div class="kpi-val" id="kv1">0%</div><div class="kpi-lbl">der ADHS-Zielgruppe stark überfordert durch App-Anzahl</div></div>
+    <div class="kpi"><div class="kpi-val" id="kv2">0%</div><div class="kpi-lbl">NT-Kontrollgruppe zum Vergleich</div></div>
+    <div class="kpi"><div class="kpi-val" id="kv3">0</div><div class="kpi-lbl">Navigationsprobleme im Testing</div></div>
+    <div class="kpi"><div class="kpi-val" id="kv4">0€</div><div class="kpi-lbl">Max. Zahlungsbereitschaft (validiert)</div></div>
+  </div>
+
+  <!-- 4-Felder-Schema -->
+  <div style="margin-top:2rem">
+    <div class="sec-tag">4-Felder-Schema · Annahme 1: All-in-One Workspace</div>
+    <div class="test-grid">
+      <div class="test-card tc-a"><div class="test-label">Annahme</div><div class="test-content">Das mechanische Wechseln zwischen separaten Apps ist die primäre Ursache für kognitive Überlastung und Lernsitzungs-Abbruch bei ADHS-Studierenden.</div></div>
+      <div class="test-card tc-b"><div class="test-label">Beobachtung</div><div class="test-content">100% der ADHS-Zielgruppe berichten starke bis extreme Überforderung durch App-Fragmentierung. Nur 22,2% der neurotypischen Kontrollgruppe. 58% aller Befragten nutzen 3+ Apps parallel (Ø 3,4).</div></div>
+      <div class="test-card tc-c"><div class="test-label">Aussagen</div><div class="test-content">"Dass die KI einfach da ist, ohne dass ich extra was aufmachen muss, das ist richtig praktisch." (Person 4) — "Ich finde es sehr gut, dass eine KI direkt an der Seite ist." (Person 2)</div></div>
+      <div class="test-card tc-d"><div class="test-label">Erkenntnis & Konsequenz</div><div class="test-content"><strong>Annahme bestätigt.</strong> Objektpermanenz-Defizit empirisch belegt. KI-Split-Screen als permanente Präsenz ist das stärkste differenzierende Feature → In UI priorisieren.</div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem">
+    <div class="sec-tag">4-Felder-Schema · Annahme 2: Gamification & Panik-Modus</div>
+    <div class="test-grid">
+      <div class="test-card tc-a"><div class="test-label">Annahme</div><div class="test-content">Intrinsische Belohnungssysteme und zeitliche Verknappung (Panik-Modus) helfen ADHS-Gehirnen, Task Initiation Paralysis zu überwinden.</div></div>
+      <div class="test-card tc-b"><div class="test-label">Beobachtung</div><div class="test-content">Person 1 navigiert direkt zum Panikmodus. Alle 4 Tester loben Streak/Level-System explizit. Person 3 vergleicht mit Forest-App. Null Navigationsprobleme über alle Tester hinweg.</div></div>
+      <div class="test-card tc-c"><div class="test-label">Aussagen</div><div class="test-content">"Panik Modus finde ich sehr entertaining, so macht das mehr Spaß und ist einfacher zu lernen." — "Streak gefällt mir auch gut und finde ich motivierend." (Person 1)</div></div>
+      <div class="test-card tc-d"><div class="test-label">Erkenntnis & Konsequenz</div><div class="test-content"><strong>User-Validated Pivot.</strong> Was initial kontraintuitiv wirkte, ist stärkstes Engagement-Feature. Visuelles Belohnungssystem ergänzen (wachsende Synapsen-Map analog Forest-Baum) → Product Backlog Prio 1.</div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem">
+    <div class="sec-tag">4-Felder-Schema · Annahme 3: Zahlungsbereitschaft</div>
+    <div class="test-grid">
+      <div class="test-card tc-a"><div class="test-label">Annahme</div><div class="test-content">Zielgruppe vergleicht mit einfachen Karteikarten-Tools und ist nur für Kleinstbeträge (6–7 €/Mo) offen.</div></div>
+      <div class="test-card tc-b"><div class="test-label">Beobachtung</div><div class="test-content">Zahlungsbereitschaft liegt bei bis zu 25 €/Monat — sofern KI-Integration als überlegen gegenüber Gratis-Tools kommuniziert wird. Benchmark: ChatGPT Plus (~20 €).</div></div>
+      <div class="test-card tc-c"><div class="test-label">Aussagen</div><div class="test-content">"Ich würde maximal 25 € im Monat ausgeben." (Person 2) — Risiko: ohne deutlichen KI-Mehrwert wird sofort zu kostenlosen Alternativen gewechselt.</div></div>
+      <div class="test-card tc-d"><div class="test-label">Erkenntnis & Konsequenz</div><div class="test-content"><strong>Annahme revidiert & erhöht.</strong> Preisanker ist ChatGPT Plus, nicht Karteikarten-App. KI muss unübersehbar im Zentrum der Landingpage & Onboarding stehen → Pricing-Kommunikation anpassen.</div></div>
+    </div>
+  </div>
+
+  <div class="pivot-box" style="margin-top:2rem">
+    <div class="pivot-label">⚡ Product Backlog (aus Testing abgeleitet)</div>
+    <div class="card-grid" style="margin-top:.8rem">
+      <div><strong style="color:var(--text);font-size:.85rem">1. Visuelles Belohnungssystem</strong><br><span style="font-size:.8rem;color:var(--muted)">Wachsende Synapsen-Map je Streak-Tag (analog Forest)</span></div>
+      <div><strong style="color:var(--text);font-size:.85rem">2. KI-Werthaltigkeit</strong><br><span style="font-size:.8rem;color:var(--muted)">UI-Fokus auf KI-Vorteil · B2C-Pricing bis 25 €</span></div>
+      <div><strong style="color:var(--text);font-size:.85rem">3. Co-Studying / Social</strong><br><span style="font-size:.8rem;color:var(--muted)">ADHS-Body-Double-Modus · Anonyme Fokus-Räume</span></div>
+      <div><strong style="color:var(--text);font-size:.85rem">4. Hybride Content-Erstellung</strong><br><span style="font-size:.8rem;color:var(--muted)">"+ Eigene Karteikarte" direkt neben KI-Stapeln</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6: SCIENCE -->
+<section id="s6">
+  <div class="sec-tag">06 · Wissenschaftliche Basis</div>
+  <h2 class="sec-h">Jedes Feature hat<br>eine Quelle.</h2>
+  <p class="sec-body">Die Feature-Architektur von Flowly ist nicht intuitiv entwickelt — sie ist wissenschaftlich abgeleitet. Jede Design-Entscheidung referenziert peer-reviewed Forschung zur ADHS-Kognition.</p>
+
+  <div class="sci-grid">
+    <div class="sci-row">
+      <div class="sci-feat">Material-Hub & Dashboard</div>
+      <div class="sci-ref">Studierende mit ADHS benötigen integrierte Unterstützungsstrukturen — ständiger Systemwechsel belastet ohnehin eingeschränkte exekutive Funktionen. <em>Álvarez-Godos et al. (2023); Sweller's Cognitive Load Theory (Split-Attention-Effekt)</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">KI-Konzeptextraktion</div>
+      <div class="sci-ref">Studierende scheitern nicht am fehlenden Verständniswillen, sondern an Organisation und Strukturierung. KI extrahiert — aktives Lernen verbleibt beim Studierenden. <em>Hartung et al. (2022); Wecks et al. Uni Bremen (2024)</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">Mindmap + Gedächtnisstärke-Ringe</div>
+      <div class="sci-ref">ADHS-Gehirne stark beeinträchtigt durch fragmentierte Informationsdarstellung. Visuell-räumliche Darstellung steigert Konzentration und Motivation signifikant. <em>PMC (2025); Cuber et al. VR-Studie (2024), n=27</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">Pomodoro-Timer</div>
+      <div class="sci-ref">Time Blindness — Unfähigkeit, Zeit intuitiv zu spüren — ist ein Kerndefizit bei ADHS. Explizite Zeitmanagement-Tools verbessern Aufmerksamkeit signifikant. <em>arXiv (2025) KI-Framework ADHS; Hartung et al. (2022) OTMP</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">Panik-Modus</div>
+      <div class="sci-ref">Dysfunktionales Belohnungssystem: externe Dringlichkeit aktiviert Dopaminausschüttung → Hyperfokus-Zustände. Kurzfristige intensive Interventionen reduzieren Stress. <em>ADHS Deutschland e.V.; Bettis et al. (2017)</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">KI-Tutor (Split-Screen)</div>
+      <div class="sci-ref">Individualisiertes Tutoring = wirksamste akademische Unterstützungsform für ADHS-Studierende. Flowly-KI kennt alle Konzepte des Fachs → kontextspezifische Erklärungen. <em>Álvarez-Godos et al. (2023); Prevatt et al. (2017)</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">Gamification (XP/Streak)</div>
+      <div class="sci-ref">ADHS = primär Störung des Belohnungssystems. Unmittelbare, häufige Rückmeldung nötig. +15 XP pro richtiger Karte, +30 für Pomodoro, +100 für neues Fach. <em>Gabriely et al. (2020); Cuber et al. (2024)</em></div>
+    </div>
+    <div class="sci-row">
+      <div class="sci-feat">Lernplan & Klausur-Bereitschaft</div>
+      <div class="sci-ref">62,5% aller Studierenden beginnen später als geplant — bei ADHS deutlich höher durch Time Blindness. Explizite Organisationssysteme senken Unaufmerksamkeitswerte signifikant. <em>LaCount et al. (2018) OTMP; arXiv (2025); DuPaul et al. (2018)</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7: DESIGN -->
+<section id="s7">
+  <div class="sec-tag">07 · Neuro-Ästhetik & Design</div>
+  <h2 class="sec-h">Farben als kognitive<br>Intervention.</h2>
+  <p class="sec-body">Die Farbpalette ist keine ästhetische Entscheidung — sie ist eine klinisch begründete Designentscheidung. Pfeifer et al. (2022): MINT-Lernumgebungen für ADHS müssen kognitiv entlastend gestaltet sein. Visueller Overload reduziert direkt die Aufmerksamkeitskapazität. Eigene Umfrage: 63% der Befragten fühlen sich von bestehenden Tools überfordert.</p>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card" style="border-color:var(--sage)">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--sage);margin-bottom:.8rem"></div>
+      <div class="card-h" style="color:var(--sage)">#A3B18A · Sage Green</div>
+      <div class="card-body">Organisch, beruhigend. Assoziiert mit Natur und Ruhe — reduziert kortikale Erregung. Primäre Akzentfarbe für CTAs, Fortschrittsanzeigen, positive Zustände.</div>
+    </div>
+    <div class="card" style="border-color:var(--lavender)">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--lavender);margin-bottom:.8rem"></div>
+      <div class="card-h" style="color:var(--lavender)">#C4B5FD · Neuro-Lavender</div>
+      <div class="card-body">Synaptisch, kreativ. Lavender assoziiert mit kognitiver Klarheit und kreativem Denken. Für Mindmap-Verbindungen, KI-Features, sekundäre Highlights.</div>
+    </div>
+    <div class="card" style="border-color:var(--border)">
+      <div style="width:32px;height:32px;border-radius:50%;background:#0F0F0F;border:1px solid var(--border);margin-bottom:.8rem"></div>
+      <div class="card-h">#0F0F0F · Deep Dark Mode</div>
+      <div class="card-body">Keine harten Kontraste — <strong>reizarmes Interface</strong>. Dunkler Modus reduziert visuelle Belastung für ADHS-Betroffene, die häufig lichtempfindlich sind. Kein "KI-Grau", sondern warmes Tief-Schwarz.</div>
+    </div>
+    <div class="card">
+      <div class="card-h">Framer-Motion-Prinzip</div>
+      <div class="card-body">Übergänge statt Sprünge. <strong>Blur-In-Übergänge</strong> und weiche Animationen minimieren extraneous cognitive load — Belastung, die nicht dem Lernen selbst, sondern der Orientierung in der UI dient.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8: RISK & PIVOT -->
+<section id="s8">
+  <div class="sec-tag">08 · Risiko & Pivot-Strategie</div>
+  <h2 class="sec-h">Was das GM killen könnte —<br>und wie wir dagegen bauen.</h2>
+  <p class="sec-body">Drei identifizierte Risiken aus Testing, Coaching und Marktanalyse. Für jedes Risiko gibt es eine konkrete Mitigationsstrategie.</p>
+
+  <div class="stack-row">
+    <div class="stack-item">
+      <div class="stack-dot" style="background:var(--red)"></div>
+      <div>
+        <div class="stack-h">Saisonaler Churn nach Klausurphase</div>
+        <div class="stack-body">Studierende nutzen Flowly intensiv in Jan/Feb und Jun/Jul, kündigen in Semesterferien. <strong>Mitigation:</strong> Semester-Pass statt monatliches Abo · Günstigerer Jahrestarif (4,99 €/Mo × 12) · Lernplan wird zwischen Phasen zur Vorbereitung genutzt.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot" style="background:var(--amber)"></div>
+      <div>
+        <div class="stack-h">Power-User-Kosten-Anomalie</div>
+        <div class="stack-body">Ein User mit 500-seitigen Skripten und tausenden Fragen frisst den Gewinn von 5 normalen Usern. <strong>Mitigation:</strong> Strenges Fair-Use-Limit auf Datenvolumen (nicht auf Zeit) bereits im MVP verankern. Datenvolumen ist messbar, Nutzungsdauer nicht.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot" style="background:var(--lavender)"></div>
+      <div>
+        <div class="stack-h">Big-Player-Plagiation</div>
+        <div class="stack-body">OpenAI/Google könnten PDF-Analysefunktionen auf Studenten zuschneiden. <strong>Mitigation:</strong> Flowly ist nicht "PDF-Chat" — die Kombination aus ADHS-Spezifität, Gamification, Lernplan, Pomodoro und Body-Double-Modus ist als integriertes System nicht einfach zu replizieren. Moat liegt in der Zielgruppen-Spezifität.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot" style="background:var(--muted)"></div>
+      <div>
+        <div class="stack-h">DSGVO-Compliance vor Monetarisierung</div>
+        <div class="stack-body">Prototyp ist nicht DSGVO-konform — vor echter Monetarisierung zwingend erforderlich. <strong>Mitigation:</strong> AWS Frankfurt (EU) + Mistral AI (Paris, AVV unkompliziert) + ChromaDB lokal. Kein Geld verlangen bevor Compliance steht.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot" style="background:var(--teal)"></div>
+      <div>
+        <div class="stack-h">KI-Differenzierung muss sichtbar bleiben</div>
+        <div class="stack-body">Testing-Erkenntnis: ohne deutlichen KI-Mehrwert wandern User zu Gratis-Tools. KI ist der einzige Differenzierungsfaktor zum kostenlosen Markt. <strong>Mitigation:</strong> KI unübersehbar auf Landingpage & Onboarding · Preisanker ist ChatGPT Plus (20 €), nicht Anki.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9: TECH SETUP -->
+<section id="s9">
+  <div class="sec-tag">09 · Technical Architecture</div>
+  <h2 class="sec-h">DSGVO-konform.<br>API-first. EU-only.</h2>
+  <p class="sec-body">Architektur-Entscheidung gegen lokales GPU-Hosting (Fixkosten ~150–300€/Mo) zugunsten API-Hybrid. Alle Daten bleiben in EU-Rechenzentren. Keine Weitergabe an Dritte zum Training.</p>
+
+  <div class="stack-row">
+    <div class="stack-item">
+      <div class="stack-dot"></div>
+      <div>
+        <div class="stack-h">LLM-Layer: Mistral AI (Paris) + AWS Bedrock Frankfurt</div>
+        <div class="stack-body">Mistral: EU-Unternehmen, DSGVO-AVV unkompliziert, exzellente Open-Weight-Modelle per API. AWS Bedrock Frankfurt: Claude/GPT-Modelle ohne EU-Ausgang. Kein Training auf User-Daten. Lizenz: Apache 2.0 / Llama 3 Community License (kommerziell erlaubt bis 700M User).</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot"></div>
+      <div>
+        <div class="stack-h">Vektordatenbank: ChromaDB / Faiss (lokal)</div>
+        <div class="stack-body">Für MVP: leichtgewichtig, Docker-Container, 10€-Server. Skalierung zu Pinecone/Qdrant erst ab Tausenden Usern. Embedding Kosten: ~0,004€ pro 100-Seiten-PDF (OpenAI Embeddings API).</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot"></div>
+      <div>
+        <div class="stack-h">RAG-Architektur (Retrieval-Augmented Generation)</div>
+        <div class="stack-body">User lädt PDF → Chunking + Embedding → Vektordatenbank. Bei Frage: Top-k relevante Chunks werden mit Prompt an LLM gesendet. KI-Tutor kennt nur die relevanten Konzepte des Fachs — kein unkontrolliertes Halluzinieren.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot"></div>
+      <div>
+        <div class="stack-h">MVP-Roadmap: API-Hybrid → Eigene Infrastruktur</div>
+        <div class="stack-body">Phase 1 (MVP): API-only, variable Kosten (~0,15€/User/Mo), kein Fixkostenrisiko. Phase 2 (>500 User): Hybrid — häufige Tasks lokal (Mistral 7B auf kleinem GPU-Server), seltene Tasks per API. Phase 3: Vollständig eigene Inferenz-Infrastruktur.</div>
+      </div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-dot"></div>
+      <div>
+        <div class="stack-h">GTM & AARRR-Metriken</div>
+        <div class="stack-body">Beachhead: ADHS-Hochschulgruppen, LinkedIn-Outreach, Studierenden-Netzwerke. CAC-Ziel: unter 3 €/User organic. LTV bei 4,99 €/Mo × 8 Monate aktiver Nutzung = ~40 € LTV. Ratio LTV/CAC &gt; 13 = sehr gesund.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AARRR -->
+  <div class="sec-tag" style="margin-top:2rem">AARRR-Framework</div>
+  <div class="aarrr">
+    <div class="aarrr-cell"><div class="aarrr-letter">A</div><div class="aarrr-name">Acquisition</div><div class="aarrr-val">LinkedIn Outreach · ADHS-Gruppen · Uni-Events</div></div>
+    <div class="aarrr-cell"><div class="aarrr-letter">A</div><div class="aarrr-name">Activation</div><div class="aarrr-val">Erstes Fach erstellt &lt;5 Min · KI-Onboarding direkt</div></div>
+    <div class="aarrr-cell"><div class="aarrr-letter">R</div><div class="aarrr-name">Retention</div><div class="aarrr-val">Streak-System · Semester-Pass · Lernplan</div></div>
+    <div class="aarrr-cell"><div class="aarrr-letter">R</div><div class="aarrr-name">Revenue</div><div class="aarrr-val">Paywall nach 2 Fächern / 50 Seiten</div></div>
+    <div class="aarrr-cell"><div class="aarrr-letter">R</div><div class="aarrr-name">Referral</div><div class="aarrr-val">Body-Double-Modus · Lerngruppen-Chat</div></div>
+  </div>
+
+  <!-- Sources -->
+  <div class="card" style="margin-top:2rem;border-style:dashed">
+    <div class="card-h">Quellenverzeichnis (Auswahl)</div>
+    <div class="card-body" style="font-size:.78rem;line-height:2">
+      Pagespetit et al. (2025) · Journal of Attention Disorders · DOI 10.1177/10870547241306554<br>
+      Álvarez-Godos et al. (2023) · Frontiers in Psychology · DOI 10.3389/fpsyg.2023.1216692<br>
+      Cuber et al. (2024) · CHI Conference · DOI 10.1145/3613904.3643021<br>
+      Kofler et al. (2020) · Neuropsychology · DOI 10.1037/neu0000641<br>
+      arXiv (2025) · AI-Based Framework ADHS · arxiv.org/pdf/2507.06864<br>
+      PMC (2025) · Technology use & ADHD · PMC12094466<br>
+      LaCount et al. (2018) · OTMP-Studie · ADHS Organisationssysteme<br>
+      Hartung et al. (2022) · Interventionsstudie ADHS-Studierende<br>
+      Gabriely et al. (2020) · Gamification & ADHS Selbstregulation<br>
+      Bettis et al. (2017) · Kurzfristige Lerninterventionen ADHS
+    </div>
+  </div>
+</section>
+
+<div style="height:80px"></div>
+
+<script>
+const sections = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+const names = ['Overview','Problem','Solution','Markt','Business','Testing','Wissenschaft','Design','Risiko','Tech'];
+
+function goto(i){document.getElementById(sections[i]).scrollIntoView({behavior:'smooth'})}
+
+window.addEventListener('scroll',()=>{
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+  document.getElementById('progress-bar').style.width = (scrolled*100) + '%';
+  const mid = window.scrollY + window.innerHeight/2;
+  let cur = 0;
+  sections.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    if(el && el.offsetTop <= mid) cur = i;
+  });
+  document.querySelectorAll('.nav-link').forEach((l,i)=>{
+    l.classList.toggle('active', i===cur);
+  });
+  document.getElementById('section-counter').textContent = String(cur+1).padStart(2,'0') + ' / 10';
+  // Animate KPIs when testing section visible
+  animateKPIs();
+  // Draw mindmap lines when visible
+  drawLines();
+  // Fade-in sections
+  sections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const rect = el.getBoundingClientRect();
+    if(rect.top < window.innerHeight * 0.85) el.classList.add('visible');
+  });
+});
+
+let linesDrawn = false;
+function drawLines(){
+  const s1 = document.getElementById('s1');
+  if(!s1 || linesDrawn) return;
+  const rect = s1.getBoundingClientRect();
+  if(rect.top < window.innerHeight * 0.7){
+    linesDrawn = true;
+    ['l1','l2','l3','l4'].forEach((id,i)=>{
+      setTimeout(()=>{
+        const el = document.getElementById(id);
+        if(el) el.style.cssText += 'opacity:1;transition:opacity .4s';
+      }, i*150);
+    });
+  }
+}
+
+let kpisDone = false;
+function animateKPIs(){
+  const el = document.getElementById('s5');
+  if(!el || kpisDone) return;
+  const rect = el.getBoundingClientRect();
+  if(rect.top < window.innerHeight * 0.8){
+    kpisDone = true;
+    animateNum('kv1', 0, 100, '%', 800);
+    animateNum('kv2', 0, 22.2, '%', 800, 1);
+    animateNum('kv3', 0, 0, '', 400);
+    animateNum('kv4', 0, 25, '€', 900);
+  }
+}
+function animateNum(id, from, to, suffix, dur, decimals=0){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const start = performance.now();
+  function frame(now){
+    const p = Math.min((now-start)/dur, 1);
+    const val = from + (to-from)*p;
+    el.textContent = val.toFixed(decimals) + suffix;
+    if(p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function showInfo(msg){
+  const el = document.getElementById('node-info');
+  if(el){el.textContent = '🔬 ' + msg;el.style.borderColor='var(--sage)'}
+}
+
+// Lavender pulse on mindmap hover
+document.querySelectorAll('[id^="mn"]').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    el.querySelector('ellipse').style.filter='brightness(1.3)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    el.querySelector('ellipse').style.filter='';
+  });
+});
+
+// Trigger on load
+setTimeout(()=>window.dispatchEvent(new Event('scroll')), 100);
+</script>
